@@ -1,10 +1,10 @@
 // App.jsx
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, Outlet } from 'react-router-dom';
-
+import axios from 'axios';
 import FirstNav from './page/FirstNav';
 import Navbar from './page/Navbar';
-import Home from './page/home';
+import Home from './page/Home';
 import './App.css';
 
 function RequireAuth({ auth }) {
@@ -23,32 +23,28 @@ export default function App() {
   const [auth, setAuth] = useState({ loading: true, loggedIn: false });
 
   useEffect(() => {
-    const controller = new AbortController();
-
-    (async () => {
+    const checkAuth = async () => {
       try {
-        const res = await fetch('/api/auth/status', {
-          method: 'GET',
-          credentials: 'include',
-          cache: 'no-store',
-          signal: controller.signal,
+        const res = await axios.get("/api/auth/status", {
+          withCredentials: true,
         });
 
-        // 401/403이면 로그인 아님으로 처리
-        if (!res.ok) {
-          setAuth({ loading: false, loggedIn: false });
-          return;
-        }
+        setAuth({
+          loading: false,
+          loggedIn: !!res.data.loggedIn,
+        });
 
-        const data = await res.json();
-        setAuth({ loading: false, loggedIn: !!data.loggedIn });
       } catch (e) {
-        if (e.name === 'AbortError') return;
-        setAuth({ loading: false, loggedIn: false });
-      }
-    })();
+        console.error(e);
 
-    return () => controller.abort();
+        setAuth({
+          loading: false,
+          loggedIn: false,
+        });
+      }
+    }; 
+
+    checkAuth();
   }, []);
 
   return (
@@ -56,13 +52,13 @@ export default function App() {
       <Routes>
         {/* 비로그인 전용 */}
         <Route element={<PublicOnly auth={auth} />}>
-          <Route path="/" element={<FirstNav />} />
+          <Route path="/" element={<FirstNav setAuth={setAuth} />} />
         </Route>
 
         {/* 로그인 사용자 전용 */}
         <Route element={<RequireAuth auth={auth} />}>
-          <Route path="/Home" element={<><Navbar /><Home /></>} />
-          <Route path="/Home/:category" element={<><Navbar /><Home /></>} />
+          <Route path="/Home" element={<><Navbar setAuth={setAuth} /><Home /></>} />
+          <Route path="/Home/:category" element={<><Navbar setAuth={setAuth} /><Home /></>} />
         </Route>
 
         {/* 404 */}

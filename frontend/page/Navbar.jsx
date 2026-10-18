@@ -1,22 +1,23 @@
-import { getAuth, signOut } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { logout } from '../api/authApi'
 
-const Navbar = () => {
+const Navbar = ({ setAuth }) => {
   const menuList = ['Outer', 'Top', 'Bottoms', 'ACC', 'Shoes', 'Logout'];
   const navigate = useNavigate();
 
 
-  const handleClick = (menu) => {
+  const handleClick = async (menu) => {
     if (menu === 'Logout') {
-      const auth = getAuth();
-      signOut(auth)
-        .then(() => {
-          console.log('로그아웃 성공');
-          window.location.href = '/';
-        })
-        .catch((error) => {
-          console.error('로그아웃 실패', error);
-        });
+      try{
+        await logout();
+        setAuth({
+        loading: false,
+        loggedIn: false,
+      }); 
+      navigate('/',{replace: true});
+    }catch(e) {
+          console.error('로그아웃 실패', e);
+        }
     } else {
       navigate(`/home/${encodeURIComponent(menu)}`);
     }

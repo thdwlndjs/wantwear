@@ -101,6 +101,18 @@ ul {
   flex-direction: column;
 }
 
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background: rgba(0, 0, 0, .3);
+  z-index: 999;
+}
+
 /* 🔘 헤더 영역 */
 .modal-header {
   display: flex;
@@ -159,11 +171,11 @@ ul {
 /* 🔘 본문 영역 */
 .modal-body {
   flex-grow: 1;
-  padding: 0 40px 0px 40px;
+  padding: 20px 40px 40px 40px;
   overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 15px;
+  gap: 30px;
   box-sizing: border-box;
   justify-content: flex-start;
   width: 100%;
@@ -193,16 +205,23 @@ ul {
 }
 
 .select-bar {
-  padding: 4px 3px 4px 7px;
-  font-size: 8px;
+  padding: 10px 3px 10px 7px;
+  font-size: 10px;
   border: 1px solid #ccc;
   border-radius: 8px;
   appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+
+  box-sizing: border-box;
+
   background-color: #fff;
   background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='18' viewBox='0 0 24 24' width='18' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/></svg>");
   background-repeat: no-repeat;
   background-position: right 10px center;
   background-size: 16px 16px;
+  margin-top: 20px;
+
 }
 
 @media (max-width: 768px) {
@@ -247,6 +266,7 @@ ul {
 
 @media (min-width: 1600px) {
   .modal {
-    max-width: 520px;
+    max-width: 1100px;
+    max-height: 1000px;;
   }
 }

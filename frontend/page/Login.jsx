@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import axios from 'axios';
 import './Login.css';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../api/authApi';
 
-const Login = () => {
+const Login = ({ setAuth }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -18,19 +18,15 @@ const Login = () => {
     setSuccessMsg('');
 
     try {
-      const res = await axios.post("http://localhost:8080/api/auth/login", {
-        email,
-        password,
+      await login(email, password);
+
+      setAuth({
+        loading: false,
+        loggedIn: true,
       });
 
-      // 백엔드에서 JWT 토큰 내려줌
-      const token = res.data.token;
-
-      // 저장
-      localStorage.setItem("token", token);
-
       setSuccessMsg("로그인 성공!");
-      navigate('/productall');
+      navigate('/Home');
 
     } catch (err) {
       console.error(err);
@@ -41,6 +37,12 @@ const Login = () => {
       }
     }
   };
+
+  const handleGoogleLogin = () => {
+  window.location.href =
+    "http://localhost:8080/oauth2/authorization/google";
+  };
+
 
   return (
     <div className="login-box">
@@ -68,6 +70,9 @@ const Login = () => {
 
           <div>
             <button type="submit" className="login-button">로그인</button>
+          </div>
+          <div>
+            <button type="button" className="login-button" onClick={handleGoogleLogin}>구글 계정으로 로그인</button>
           </div>
         </form>
 

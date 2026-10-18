@@ -173,30 +173,32 @@ function Home() {
 
       {/* 모달 */}
       {modalOpen && (
-        <div className="modal">
-          <div className="modal-header">
-            <h2>상품 등록</h2>
-            <button className="close-btn" onClick={() => setModalOpen(false)}>
-              <AiOutlineClose size={20} />
-            </button>
-          </div>
+        <div classname="modal-overlay">
+          <div className="modal">
+            <div className="modal-header">
+              <h2>상품 등록</h2>
+              <button className="close-btn" onClick={() => setModalOpen(false)}>
+                <AiOutlineClose size={20} />
+              </button>
+            </div>
 
-          <div className="modal-body">
-            <input
-              type="text"
-              value={url}
-              onChange={e => seturl(e.target.value)}
-              placeholder="상품 URL 입력"
-            />
+            <div className="modal-body">
+              <input
+                type="text"
+                value={url}
+                onChange={e => seturl(e.target.value)}
+                placeholder="상품 URL 입력"
+              />
 
-            <select value={category} onChange={e => setCategory(e.target.value)}>
-              <option value="">카테고리 선택</option>
-              {menuList.filter(cat => cat !== 'Logout').map(cat => (
-                <option key={cat} value={cat}>{cat}</option>
-              ))}
-            </select>
+              <select value={category} onChange={e => setCategory(e.target.value)}>
+                <option value="">카테고리 선택</option>
+                {menuList.filter(cat => cat !== 'Logout').map(cat => (
+                  <option key={cat} value={cat}>{cat}</option>
+                ))}
+              </select>
 
-            <button className="add-button" onClick={onAdd}>추가</button>
+              <button className="add-button" onClick={onAdd}>추가</button>
+            </div>
           </div>
         </div>
       )}

@@ -4,7 +4,7 @@ import Signin from './Signin';
 
 import './FirstNav.css';
 
-function FirstNav() {
+function FirstNav({ setAuth }) {
   const menuList = ['Log in', 'Sign in'];
   const [modalType, setModalType] = useState(null); // 'login' | 'signin'
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -48,7 +48,7 @@ function FirstNav() {
       {isModalOpen && (
         <div className="modal-overlay" onClick={handleOverlayClick}>
           <div ref={modalContentRef}>
-            {modalType === 'login' && <Login />}
+            {modalType === 'login' && <Login setAuth={setAuth} />}
             {modalType === 'signin' && <Signin />}
           </div>
         </div>
